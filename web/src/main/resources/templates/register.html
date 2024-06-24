@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('../hello.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            transition: transform 0.3s ease;
+        }
+
+        form:hover {
+            transform: translateY(-5px); /* 向上移动5像素 */
+        }
+
+        form {
+            background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            /*max-width: 400px; !* 修改最大宽度 *!*/
+            width: 100%; /* 设置宽度为100% */
+            text-align: center;
+            margin-left: 50px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 16px);
+            padding: 10px;
+            margin-bottom: 20px; /* 增加间距 */
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .btn-cat {
+            background-color: pink; /* 更改背景色为粉色 */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 25px;
+            transition: background-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-cat:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: #007bff;
+            border-radius: 50% 50% 0 0;
+            transition: all 0.4s ease;
+            transform: translateX(-75%) translateY(-40%) rotate(45deg);
+        }
+
+        .btn-cat:hover:before {
+            transform: translateX(-75%) translateY(-350%) rotate(45deg);
+        }
+
+        .btn-link {
+            color: #8a2be2 !important; /* 使用十六进制颜色代码 */
+        }
+
+        .btn-cat span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 12000000px; /* 增加最大宽度 */
+        }
+
+        .row {
+            margin-right: -8px; /* 减少右侧边距 */
+            margin-left: -80px; /* 减少左侧边距 */
+        }
+
+        @media (max-width: 400px) {
+            form {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mx-auto my-auto"> <!-- 添加 mx-auto 和 my-auto 类 -->
+            <form action="/login/register" method="post">
+                <h2 class="mb-4">Register</h2>
+                <div class="form-group">
+                    <label for="name">Username:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="pass">Password:</label>
+                    <input type="password" id="pass" name="pass" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email" required>
+                </div>
+                <button type="submit" class="btn btn-cat">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

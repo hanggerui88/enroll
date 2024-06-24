@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.enroll.mapper.StudentMapper">
+
+    <sql id="studentResultModel">
+        SELECT t1.candidate, t1.student_id, t1.student_name, t1.total_grade, t1.`rank`, t1.province, t1.city, t2.major_name, t3.department_name, t1.accepted_type
+        FROM t_student t1, t_major t2, t_department t3
+        WHERE t1.accepted_major_id = t2.major_id
+        AND t2.department_id = t3.department_id
+        AND accepted_type BETWEEN 1 AND 7
+    </sql>
+
+    <resultMap id="resultList" type="hashmap">
+        <result property="groupName" column="group_name" jdbcType="VARCHAR"/>
+        <result property="topRank" column="top_rank" jdbcType="INTEGER"/>
+        <result property="bottomRank" column="bottom_rank" jdbcType="INTEGER"/>
+        <result property="maxGrade" column="max_grade" jdbcType="INTEGER"/>
+        <result property="minGrade" column="min_grade" jdbcType="INTEGER"/>
+        <result property="averageGrade" column="average_grade" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--void insertStudent(@Param("studentList") List<ExcelStudent> students);-->
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="studentId">
+        INSERT INTO t_student
+        (candidate, student_name, total_grade, will1, will2, will3, will4, will5, will6, adjust, `rank`, province, city, subject_type, accepted_type)
+        VALUES
+        <foreach collection="studentList" item="student" separator=",">
+            (#{student.candidate}, #{student.studentName}, #{student.totalGrade}, #{student.will1}, #{student.will2}, #{student.will3},
+             #{student.will4}, #{student.will5}, #{student.will6},
+             #{student.adjust}, #{student.rank}, #{student.province}, #{student.city}, #{student.subjectType}, '-2')
+        </foreach>
+    </insert>
+
+    <!--List<ExcelStudent> getStudentRaw();-->
+    <select id="getStudentRaw" resultType="org.enroll.excel.pojo.ExcelStudent">
+        SELECT *
+        FROM t_student
+    </select>
+
+    <!--List<ExcelStudent> getExitStudentRaw();-->
+    <select id="getExitStudentRaw" resultType="org.enroll.excel.pojo.ExcelStudent">
+        SELECT candidate, student_id, student_name, total_grade, will1, will2, will3, will4, will5, will6, adjust, `rank`, province, city, subject_type
+        FROM t_student
+        WHERE accepted_type = -1
+    </select>
+
+    <select id="getStudentRawForEnroll" resultType="org.enroll.excel.pojo.ExcelStudent">
+        SELECT *
+        FROM t_student
+        ORDER BY `rank`
+        LIMIT #{start}, #{size}
+    </select>
+
+    <select id="getStudentRawForAdjust" resultType="org.enroll.excel.pojo.ExcelStudent">
+        SELECT *
+        FROM t_student
+        WHERE adjust = 1
+        AND accepted_type = 0
+        ORDER BY `rank`
+        LIMIT #{start}, #{size}
+    </select>
+
+
+    <update id="updateAccepted" >
+        <foreach collection="students" separator=";" item="student">
+            UPDATE t_student
+            SET accepted_major_id = #{student.acceptedMajorId}, accepted_type = #{student.acceptedType}
+            WHERE student_id = #{student.studentId}
+        </foreach>
+    </update>
+
+    <!--void updateAdjust(@Param("students") List<ExcelStudent> students);-->
+    <update id="updateAdjust" >
+        <foreach collection="students" item="student" separator=";">
+            UPDATE t_student
+            SET accepted_major_id = #{student.acceptedMajorId}, accepted_type = #{student.acceptedType}
+            WHERE student_id = #{student.studentId}
+        </foreach>
+    </update>
+
+    <!--List<StudentResult> getStudent(@Param("desc") boolean desc, @Param("option") QueryResultOption option);-->
+    <select id="getStudent" resultType="studentResult">
+       <include refid="studentResultModel"></include>
+        <if test="option.rank != null">
+            AND `rank` &lt;= #{option.rank}
+        </if>
+        <if test="option.majorId != null">
+            AND t2.major_id = #{option.majorId}
+        </if>
+        <if test="option.majorId == null and option.departmentId != null">
+            AND t3.department_id = #{option.departmentId}
+        </if>
+
+       ORDER BY `rank` <if test="desc == true">DESC</if>
+    </select>
+
+    <select id="getStudentForExport" resultType="studentResult">
+        <include refid="studentResultModel"></include>
+        ORDER BY `rank`
+        LIMIT #{start},#{size}
+    </select>
+
+    <select id="getExitStudentForExport" resultType="org.enroll.excel.pojo.ExcelStudent">
+        SELECT *
+        FROM t_student
+        WHERE accepted_type = -1
+        LIMIT #{start},#{size}
+    </select>
+
+    <update id="resetStudent">
+        UPDATE t_student
+        SET accepted_major_id = NULL, accepted_type = -2
+    </update>
+
+    <!--void resetTable();-->
+    <delete id="resetTable">
+        DELETE
+        FROM t_student
+    </delete>
+
+    <select id="searchStudent" resultType="studentResult">
+        <include refid="studentResultModel"></include>
+        AND t1.student_name like "%"#{keyword}"%"
+    </select>
+
+    <select id="searchStudentByCandidate" resultType="studentResult">
+        <include refid="studentResultModel"></include>
+        AND t1.candidate = #{candidate}
+    </select>
+
+</mapper>

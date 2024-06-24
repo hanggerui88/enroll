@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin</title>
+    <!-- 引入 Bootstrap 样式 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<!--     自定义样式-->
+    <style>
+        /* 调整导航样式 */
+        #sidebar {
+            background: #f8f9fa;
+            padding: 20px;
+            height: 100%;
+            position: sticky;
+            top: 0;
+        }
+        #sidebar h5 {
+            color: #333;
+        }
+        #sidebar ul.components {
+            padding: 20px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        #sidebar ul.components li {
+            margin-bottom: 10px;
+        }
+        #sidebar ul.components li a {
+            color: #333;
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        #sidebar ul.components li a:hover {
+            background: #e9ecef;
+        }
+        #sidebar ul.components ul li {
+            padding-left: 20px;
+        }
+        #sidebar ul.components ul li button {
+            padding: 5px 10px;
+            margin-top: 5px;
+            border: none; /* 移除按钮边框 */
+            background: none; /* 移除按钮背景色 */
+            color: #333; /* 设置按钮文字颜色 */
+            display: block;
+            text-align: left; /* 设置按钮文字居左 */
+            width: 100%; /* 使按钮铺满整个父元素 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <nav id="sidebar">
+                <div class="p-4 pt-5">
+                    <h5>admin</h5>
+                    <ul class="list-unstyled components mb-5">
+                        <li>
+                            <a href="#uploadExcel" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">上传Excel</a>
+                            <ul class="collapse list-unstyled" id="uploadExcel">
+                                <li>
+                                    <form id="majorForm" action="/file/uploadMajor" method="post" enctype="multipart/form-data">
+                                        <input type="file" name="file" accept=".xlsx,.xls">
+                                        <button type="submit" class="btn btn-primary btn-sm">上传专业信息</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form id="studentForm" action="/file/uploadStudent" method="post" enctype="multipart/form-data">
+                                        <input type="file" name="file" accept=".xlsx,.xls">
+                                        <button type="submit" class="btn btn-primary btn-sm">上传学生信息</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#enrollment" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">录取调剂</a>
+                            <ul class="collapse list-unstyled" id="enrollment">
+                                <li>
+                                    <form id="doEnrollForm" action="/student/doEnroll" method="get">
+                                        <button type="submit" class="btn btn-success btn-sm">录取</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form id="doAdjustForm" action="/student/doAdjust" method="get">
+                                        <button type="submit" class="btn btn-success btn-sm">调剂</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#exportResults" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">导出结果</a>
+                            <ul class="collapse list-unstyled" id="exportResults">
+                                <li>
+                                    <form id="exportResultForm" action="/file/exportResult" method="get">
+                                        <button type="submit" class="btn btn-info btn-sm">导出录取结果</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form id="exportExitForm" action="/file/exportExit" method="get">
+                                        <button type="submit" class="btn btn-info btn-sm">导出退档结果</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="col-md-9">
+            <!-- 内容区域 -->
+        </div>
+    </div>
+</div>
+<!-- 引入 Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

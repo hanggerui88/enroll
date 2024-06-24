@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>搜索学生信息</title>
+  <!-- 引入 Bootstrap 样式 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding: 20px;
+    }
+
+    .btn-cat {
+      background-color: pink;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 25px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-cat:hover {
+      background-color: #ff69b4;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto 0; /* 上边距增加到50px */
+    }
+
+    /* 新添加的样式 */
+    .input-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .input-group .form-control {
+      flex: 1;
+    }
+
+    .input-group .btn-cat {
+      margin-left: 10px; /* 增加按钮左边距 */
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>查询考生录取情况</h1>
+
+  <div id="studentTable1"></div>
+
+  <form id="searchCandidateForm">
+    <div class="input-group mb-3">
+      <label for="candidateKeyword" class="input-group-text">请输入考号：</label>
+      <input type="text" id="candidateKeyword" name="candidateKeyword" class="form-control">
+      <button type="submit" class="btn btn-cat">搜索</button>
+    </div>
+  </form>
+  <div id="studentTable2"></div>
+</div>
+
+<!-- 引入 Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById("searchCandidateForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // 阻止表单默认提交行为
+
+    var candidateKeyword = document.getElementById("candidateKeyword").value; // 获取考号关键字
+
+    // 使用 Fetch API 发起 GET 请求
+    fetch("/student/searchStudentByCandidate?keyword=" + encodeURIComponent(candidateKeyword), {
+      method: "GET"
+    })
+            .then(response => response.text()) // 将响应转换为文本
+            .then(data => {
+              // 将响应的 HTML 表格显示在页面上
+              document.getElementById("studentTable2").innerHTML = data;
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+  });
+</script>
+</body>
+</html>
